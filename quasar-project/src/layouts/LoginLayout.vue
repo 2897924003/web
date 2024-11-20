@@ -1,22 +1,22 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { useQuasar, useTimeout } from "quasar";
-import axios from "axios";
+import { useQuasar} from "quasar";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "stores/auth";
+import {api, gatewayCAS} from "boot/axios.js";
 
 const $q = useQuasar();
-const username = ref(null);
-const password = ref(null);
+const username = ref();
+const password = ref();
 const $router = useRouter();
 const authStore = useAuthStore();
 const rememberMe = ref(false);
-const selectedSystem = ref({ label: null, value: null });
+const selectedSystem = ref({ label: null, path: null });
 const systems = ref([
-  { label: "学生管理系统", value: "systemA" },
-  { label: "项目管理系统", value: "systemB" },
-  { label: "测试系统", value: "authentication" },
-  { label: "聊天室", value: "chat" }
+  { label: "学生管理系统", path: "systemA" },
+  { label: "项目管理系统", path: "systemB" },
+  { label: "测试系统", path: "authentication" },
+  { label: "聊天室", path: "chat" }
 ]);
 
 /*匿名登陆,访问受限*/
@@ -24,8 +24,9 @@ const anonymous = async () => {
   await $router.push("mainlayout");
 };
 
-/*账号密码登陆*/
-const login = async () => {
+
+/*表单登录*/
+const formLogin = async () => {
   $q.loadingBar.start();
   $q.loadingBar.stop();
 
@@ -41,7 +42,7 @@ const login = async () => {
     return;
   }*/
   /*
-  暂时简化,等学了ssr,用nodejs.
+
   const recaptchaVerify = await axios.post(
     "https://www.google.com/recaptcha/api/siteverify",
     { secret: "6Ld8j_spAAAAAJpQxXF2uy3cM3YOLPgCzfM2vgXK", response: recaptchaResponse }
@@ -58,7 +59,7 @@ const login = async () => {
   }
 */
 
-  if (!selectedSystem.value.value) {
+  if (!selectedSystem.value.path) {
     $q.notify({
       message: "请选择一个系统",
       position: "top",
@@ -68,10 +69,9 @@ const login = async () => {
     return;
   }
 
-  const response = await axios.post(
-    //'http://localhost:8080/login',
-    //'http://localhost:8080/api/authentication/client-login',
-    `https://test.opensun.asia/api/${selectedSystem.value.value}/client-login`,
+
+  const response = await gatewayCAS.post(
+    '/login',
     {
       username: username.value,
       password: password.value,
@@ -83,19 +83,20 @@ const login = async () => {
       },
       withCredentials: true
     },
-  );
+  )
+  console.log(response.status)
+  console.log(response.data)
 
-  if (response.data.status === 200) {
+  if (response.status === 200) {
     // 将JWT令牌存入会话存储
-    sessionStorage.setItem("jwt", response.headers.get("Authorization"));
-    alert( response.headers.get("Authorization") );
-
+    sessionStorage.setItem("access_token", response.headers.get("access_token"));
     $q.notify({
       message: "欢迎!",
       position: "top",
       avatar: "https://cdn.quasar.dev/img/boy-avatar.png",
     });
-    authStore.login();
+
+    authStore.login(response.data);
     await $router.push("/mainlayout");
   } else {
     $q.notify({
@@ -107,7 +108,7 @@ const login = async () => {
 };
 
 const register = async () => {
-  if (!selectedSystem.value.value) {
+  if (!selectedSystem.value.label) {
     $q.notify({
       message: "请选择一个系统",
       position: "top",
@@ -117,9 +118,8 @@ const register = async () => {
     return;
   }
 
-  const response = await axios.post(
-    //'http://localhost:8082/api/authentication/client-register',
-    `https://test.opensun.asia/api/${selectedSystem.value.value}/client-register`,
+  const response = await gatewayCAS.post(
+    '/users/register',
     { username: username.value, password: password.value },
     {
       headers: {
@@ -162,7 +162,7 @@ onMounted(async () => {
         style="max-width: 100%; max-height: 100%"
       >
         <div class="q-pa-md" style="max-width: 400px">
-          <q-form @submit="login" class="q-gutter-md">
+          <q-form @submit="formLogin" class="q-gutter-md">
             <q-select
               v-model="selectedSystem"
               :options="systems"
@@ -220,7 +220,7 @@ onMounted(async () => {
 
               <q-btn
                 push
-                href="https://test.opensun.asia/oauth2/authorization/github"
+                href="https://ss.opensun.asia/oauth2/authorization/github"
                 color="teal"
                 ><q-avatar><q-icon name="fa-brands fa-github" /></q-avatar
               ></q-btn>

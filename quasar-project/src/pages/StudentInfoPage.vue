@@ -160,6 +160,7 @@
 import { onMounted, ref } from "vue";
 import axios from "axios";
 import { exportFile, useQuasar } from "quasar";
+import {api} from "boot/axios.js";
 const $q = useQuasar();
 
 // 定义学生信息表格列
@@ -266,15 +267,15 @@ const exportTable = () => {
 // 支持异步的数据获取方法
 const fetchFromServer = async () => {
   try {
-    const response = await axios.get(
-      "/api/class/student_infos",
+    const response = await api.get(
+      "users",
       {
         headers: { Authorization: sessionStorage.getItem("jwt") },
       },
     );
 
     // 成功将响应的数据接收
-    originalRows.value = response.data.records;
+    originalRows.value = response.data.content;
     // 更新总行数
     pagination.value.rowsNumber = originalRows.value.length;
 

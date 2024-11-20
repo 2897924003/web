@@ -40,7 +40,7 @@ export default configure((ctx) => {
         node: "node20",
       },
 
-      vueRouterMode: "hash", // available values: 'hash', 'history'
+      vueRouterMode: "history", // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -113,6 +113,7 @@ export default configure((ctx) => {
 
       // Quasar plugins
       plugins: [
+        "Dialog",
         "Notify",
         "LoadingBar",
         "LocalStorage",

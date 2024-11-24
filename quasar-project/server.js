@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 
 // 路径设置
-const DIST_DIR = path.join(process.cwd(), 'dist/spa');
+const DIST_DIR = path.join(process.cwd(), "dist/spa");
 
 // 创建 Bun 服务器
 serve({
@@ -12,9 +12,9 @@ serve({
     const url = new URL(req.url);
 
     // 处理静态文件请求
-    if (url.pathname === '/') {
-      return new Response(fs.readFileSync(path.join(DIST_DIR, 'index.html')), {
-        headers: { 'Content-Type': 'text/html' }
+    if (url.pathname === "/") {
+      return new Response(fs.readFileSync(path.join(DIST_DIR, "index.html")), {
+        headers: { "Content-Type": "text/html" },
       });
     }
 
@@ -23,12 +23,12 @@ serve({
     if (fs.existsSync(filePath)) {
       const contentType = getContentType(filePath);
       return new Response(fs.readFileSync(filePath), {
-        headers: { 'Content-Type': contentType }
+        headers: { "Content-Type": contentType },
       });
     }
 
     // API 请求处理
-    if (url.pathname.startsWith('/assets')) {
+    if (url.pathname.startsWith("/assets")) {
       const headers = {
         "Access-Control-Allow-Origin": "*", // 生产环境中应改为特定域名
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -47,7 +47,7 @@ serve({
     }
 
     // 404 Not Found
-    return new Response('404 Not Found', { status: 404 });
+    return new Response("404 Not Found", { status: 404 });
   },
 });
 
@@ -55,22 +55,22 @@ serve({
 function getContentType(filePath) {
   const ext = path.extname(filePath);
   switch (ext) {
-    case '.html':
-      return 'text/html';
-    case '.js':
-      return 'application/javascript';
-    case '.css':
-      return 'text/css';
-    case '.json':
-      return 'application/json';
-    case '.png':
-      return 'image/png';
-    case '.jpg':
-    case '.jpeg':
-      return 'image/jpeg';
-    case '.gif':
-      return 'image/gif';
+    case ".html":
+      return "text/html";
+    case ".js":
+      return "application/javascript";
+    case ".css":
+      return "text/css";
+    case ".json":
+      return "application/json";
+    case ".png":
+      return "image/png";
+    case ".jpg":
+    case ".jpeg":
+      return "image/jpeg";
+    case ".gif":
+      return "image/gif";
     default:
-      return 'application/octet-stream';
+      return "application/octet-stream";
   }
 }

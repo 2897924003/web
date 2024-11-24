@@ -5,13 +5,13 @@ export const useAuthStore = defineStore("auth", {
     isLoggedIn: false,
     user: {
       id: null, //用户唯一标识
-      username: null,//用户登录账号名
-      nickname: null,//用户名
-      img: null,//用户头像
-    }
+      username: null, //用户登录账号名
+      nickname: null, //用户名
+      img: null, //用户头像
+    },
   }),
-  getters:{
-      getUser: (state) => state.user,
+  getters: {
+    getUser: (state) => state.user,
   },
   actions: {
     login(userInfo) {

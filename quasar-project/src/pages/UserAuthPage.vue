@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import axios from "axios";
-import {api} from "boot/axios.js";
+import { api } from "boot/axios.js";
 // 定义表格列
 const columns = [
   {
@@ -73,14 +73,11 @@ const columns = [
 const rows = ref([]);
 /*查询用户信息*/
 onMounted(async () => {
-  const response = await api.get(
-    '/users',
-    {
-      headers: {
-        Authorization: sessionStorage.getItem("jwt"),
-      },
+  const response = await api.get("/users", {
+    headers: {
+      Authorization: sessionStorage.getItem("jwt"),
     },
-  );
+  });
   rows.value = response.data.content;
 });
 

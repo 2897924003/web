@@ -3,9 +3,6 @@ import ArticleDetailPage from "pages/article_management/ArticleDetailPage.vue";
 import CodeRunner from "pages/CodeRunner.vue";
 
 const routes = [
-
-
-
   {
     path: "/",
     component: () => import("layouts/LoginLayout.vue"),
@@ -34,9 +31,6 @@ const routes = [
         component: () => import("pages/TargetPage.vue"),
       },
 
-
-
-
       {
         path: "/userauthpage",
         meta: { requireAuthenticated: true },
@@ -47,8 +41,6 @@ const routes = [
         meta: { requireAuthenticated: false },
         component: () => import("pages/StudentInfoPage.vue"),
       },
-
-
     ],
   },
   {
@@ -71,14 +63,13 @@ const routes = [
         meta: { requireAuthenticated: false },
         component: () => import("pages/UserManage.vue"),
       },
-
-    ]
+    ],
   },
   {
     path: "/discuss",
     component: () => import("layouts/DiscussionCenter.vue"),
     meta: { requireAuthenticated: false },
-    redirect: '/discuss/home',
+    redirect: "/discuss/home",
     children: [
       {
         path: "home",
@@ -86,33 +77,34 @@ const routes = [
         component: () => import("pages/DiscussionHome.vue"),
       },
       {
-        path: 'article/:article_id',
-        name: 'ArticleDetail',
-        component: ArticleDetailPage
+        path: "article/:article_id",
+        name: "ArticleDetail",
+        component: ArticleDetailPage,
       },
       {
         path: "code",
-        name: 'CodeRunner',
+        name: "CodeRunner",
         component: () => import("pages/CodeRunner.vue"),
       },
       {
         path: "article",
         name: "ArticleManagement",
         meta: { requireAuthenticated: false },
-        component: () => import("pages/article_management/ArticleManagement.vue"),
-        children:[
+        component: () =>
+          import("pages/article_management/ArticleManagement.vue"),
+        children: [
           {
-            path:'draft',
+            path: "draft",
             meta: { requireAuthenticated: true },
-            component:()=>import("pages/article_management/DraftPage.vue"),
-          }
-        ]
+            component: () => import("pages/article_management/DraftPage.vue"),
+          },
+        ],
       },
       {
         path: "user",
         component: () => import("pages/user_management/UserManagement.vue"),
       },
-    ]
+    ],
   },
 
   /*{

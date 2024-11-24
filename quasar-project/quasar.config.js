@@ -10,7 +10,6 @@ export default configure((ctx) => {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
-
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
@@ -37,8 +36,9 @@ export default configure((ctx) => {
     build: {
       target: {
         browser: ["es2022", "firefox115", "chrome115", "safari14"],
-        node: "node20",
+        node: "node22",
       },
+
 
       vueRouterMode: "history", // available values: 'hash', 'history'
       // vueRouterBase,
@@ -57,7 +57,7 @@ export default configure((ctx) => {
       // distDir
 
       // extendViteConf (viteConf) {},
-      // viteVuePluginOptions: {},
+      // viteVuePluginOptions: {}
 
       vitePlugins: [
         [
@@ -148,13 +148,13 @@ export default configure((ctx) => {
         "render", // keep this as last one
       ],
 
-       extendPackageJson (json) {},
-       extendSSRWebserverConf (esbuildConf) {},
+      extendPackageJson(json) {},
+      extendSSRWebserverConf(esbuildConf) {},
 
-       manualStoreSerialization: true,
-       manualStoreSsrContextInjection: true,
-       manualStoreHydration: true,
-       manualPostHydrationTrigger: true,
+      manualStoreSerialization: true,
+      manualStoreSsrContextInjection: true,
+      manualStoreHydration: true,
+      manualPostHydrationTrigger: true,
 
       pwa: false,
 

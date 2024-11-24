@@ -1,7 +1,6 @@
 <script setup>
 import { useRouter } from "vue-router";
 const $router = useRouter();
-
 </script>
 
 <template>
@@ -122,6 +121,4 @@ const $router = useRouter();
   </q-page>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

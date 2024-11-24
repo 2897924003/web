@@ -279,7 +279,7 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
 import axios from "axios";
 import { useQuasar } from "quasar";
 const miniState = ref(false);
@@ -287,10 +287,10 @@ const drawer = ref(false);
 const $q = useQuasar();
 const screen = ref();
 const width = ref();
-onMounted(() =>{screen.value = window.innerWidth
+onMounted(() => {
+  screen.value = window.innerWidth;
   width.value = screen.value > 600 ? 1500 : 300;
-})
-
+});
 
 const category = [
   {

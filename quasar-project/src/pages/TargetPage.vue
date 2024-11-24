@@ -5,7 +5,10 @@
         <!-- 用户头像和欢迎语 -->
         <div class="text-center q-mb-md">
           <q-avatar size="120px">
-            <img src="https://cdn.quasar.dev/img/avatar2.jpg" alt="User Avatar" />
+            <img
+              src="https://cdn.quasar.dev/img/avatar2.jpg"
+              alt="User Avatar"
+            />
           </q-avatar>
           <h3 class="q-pt-md text-white">{{ user.name }}</h3>
           <q-btn icon="edit" flat round color="white" @click="editProfile" />
@@ -32,8 +35,21 @@
 
         <!-- 设置和修改密码按钮 -->
         <div class="q-mt-md">
-          <q-btn color="primary" glossy icon="settings" label="Settings" class="q-mb-md" @click="openSettingsDialog" />
-          <q-btn color="primary" glossy icon="lock" label="Change Password" @click="openChangePasswordDialog" />
+          <q-btn
+            color="primary"
+            glossy
+            icon="settings"
+            label="Settings"
+            class="q-mb-md"
+            @click="openSettingsDialog"
+          />
+          <q-btn
+            color="primary"
+            glossy
+            icon="lock"
+            label="Change Password"
+            @click="openChangePasswordDialog"
+          />
         </div>
       </q-card>
     </div>
@@ -60,9 +76,21 @@
           <div class="text-h6">Change Password</div>
         </q-card-section>
         <q-card-section>
-          <q-input v-model="password.oldPassword" type="password" label="Old Password" />
-          <q-input v-model="password.newPassword" type="password" label="New Password" />
-          <q-input v-model="password.confirmPassword" type="password" label="Confirm New Password" />
+          <q-input
+            v-model="password.oldPassword"
+            type="password"
+            label="Old Password"
+          />
+          <q-input
+            v-model="password.newPassword"
+            type="password"
+            label="New Password"
+          />
+          <q-input
+            v-model="password.confirmPassword"
+            type="password"
+            label="Confirm New Password"
+          />
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancel" color="primary" v-close-popup />
@@ -74,40 +102,40 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
 const user = ref({
-  name: 'Sun Jianhao',
-  email: 'sun_jh@example.com',
-  phone: '+86 123 456 7890',
-  notifications: true
-})
+  name: "Sun Jianhao",
+  email: "sun_jh@example.com",
+  phone: "+86 123 456 7890",
+  notifications: true,
+});
 
 const password = ref({
-  oldPassword: '',
-  newPassword: '',
-  confirmPassword: ''
-})
+  oldPassword: "",
+  newPassword: "",
+  confirmPassword: "",
+});
 
-const showSettingsDialog = ref(false)
-const showChangePasswordDialog = ref(false)
+const showSettingsDialog = ref(false);
+const showChangePasswordDialog = ref(false);
 
 const openSettingsDialog = () => {
-  showSettingsDialog.value = true
-}
+  showSettingsDialog.value = true;
+};
 
 const openChangePasswordDialog = () => {
-  showChangePasswordDialog.value = true
-}
+  showChangePasswordDialog.value = true;
+};
 
 const changePassword = () => {
   if (password.value.newPassword === password.value.confirmPassword) {
-    console.log('Password changed successfully')
+    console.log("Password changed successfully");
     // 执行密码修改逻辑
   } else {
-    console.log('Passwords do not match')
+    console.log("Passwords do not match");
   }
-}
+};
 </script>
 
 <style scoped>

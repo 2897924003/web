@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { useQuasar} from "quasar";
+import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "stores/auth";
-import {api, gatewayCAS} from "boot/axios.js";
+import { api, gatewayCAS } from "boot/axios.js";
 
 const $q = useQuasar();
 const username = ref();
@@ -16,7 +16,7 @@ const systems = ref([
   { label: "学生管理系统", path: "systemA" },
   { label: "项目管理系统", path: "systemB" },
   { label: "测试系统", path: "authentication" },
-  { label: "聊天室", path: "chat" }
+  { label: "聊天室", path: "chat" },
 ]);
 
 /*匿名登陆,访问受限*/
@@ -24,11 +24,8 @@ const anonymous = async () => {
   await $router.push("mainlayout");
 };
 
-
 /*表单登录*/
 const formLogin = async () => {
-  $q.loadingBar.start();
-  $q.loadingBar.stop();
 
   //const recaptchaResponse = grecaptcha.getResponse();
 
@@ -69,9 +66,8 @@ const formLogin = async () => {
     return;
   }
 
-
   const response = await gatewayCAS.post(
-    '/login',
+    "/login",
     {
       username: username.value,
       password: password.value,
@@ -81,15 +77,18 @@ const formLogin = async () => {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      withCredentials: true
+      withCredentials: true,
     },
-  )
-  console.log(response.status)
-  console.log(response.data)
+  );
+  console.log(response.status);
+  console.log(response.data);
 
   if (response.status === 200) {
     // 将JWT令牌存入会话存储
-    sessionStorage.setItem("access_token", response.headers.get("access_token"));
+    sessionStorage.setItem(
+      "access_token",
+      response.headers.get("access_token"),
+    );
     $q.notify({
       message: "欢迎!",
       position: "top",
@@ -119,7 +118,7 @@ const register = async () => {
   }
 
   const response = await gatewayCAS.post(
-    '/users/register',
+    "/users/register",
     { username: username.value, password: password.value },
     {
       headers: {
@@ -155,85 +154,73 @@ onMounted(async () => {
 </script>
 
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout>
     <q-page-container>
-      <q-page
-        class="login-page-background flex flex-center"
-        style="max-width: 100%; max-height: 100%"
-      >
-        <div class="q-pa-md" style="max-width: 400px">
-          <q-form @submit="formLogin" class="q-gutter-md">
-            <q-select
-              v-model="selectedSystem"
-              :options="systems"
-              label="选择系统"
-              outlined
-              dense
-              clearable
-              color="black"
-              bg-color="teal"
-            />
+      <q-page class="bg-paper flex " style="">
+        <template #default>
+            <q-card  class="absolute-center" style="background-color: transparent; box-shadow: none;width: 500px">
+              <q-card-section>
+                <q-form class="q-gutter-md" @submit="formLogin">
+                  <q-select
+                    v-model="selectedSystem"
+                    :options="systems"
+                    label="选择系统"
+                    outlined
+                    dense
+                    clearable
+                    color="black"
+                  />
 
-            <q-input
-              clearable
-              bg-color="teal"
-              rounded
-              outlined
-              v-model="username"
-              label="账号"
-              lazy-rules
-              :rules="[(val) => (val && val.length > 0) || '不能为空']"
-            />
+                  <q-input
+                    clearable
+                    rounded
+                    outlined
+                    v-model="username"
+                    label="账号"
+                    lazy-rules
+                    :rules="[(val) => (val && val.length > 0) || '不能为空']"
+                  />
 
-            <q-input
-              clearable
-              bg-color="teal"
-              rounded
-              outlined
-              v-model="password"
-              label="密码"
-              lazy-rules
-              :rules="[
+                  <q-input
+                    clearable
+                    rounded
+                    outlined
+                    v-model="password"
+                    label="密码"
+                    lazy-rules
+                    :rules="[
                 (val) => (val !== null && val !== '') || '不能为空',
                 (val) => (val.length > 0 && val.length < 50) || '密码过长',
               ]"
-            />
+                  />
 
-<!--            <div
-              class="g-recaptcha"
-              data-sitekey="6Ld8j_spAAAAAJpQxXF2uy3cM3YOLPgCzfM2vgXK"
-              data-callback="login"
-            ></div>-->
+                  <!--            <div
+                    class="g-recaptcha"
+                    data-sitekey="6Ld8j_spAAAAAJpQxXF2uy3cM3YOLPgCzfM2vgXK"
+                    data-callback="login"
+                  ></div>-->
 
-            <div class="row justify-around">
-              <q-btn
-                push
-                label="登录"
-                type="login"
-                color="teal"
-                text-color="black"
-              >
-              </q-btn>
+                  <q-card-actions>
+                    <q-btn label="登录" type="submit" />
+                    <q-btn push label="注册" @click="register" />
+                    <q-btn push label="匿名访问" @click="anonymous" />
+                    <q-btn href="https://test.opensun.asia/oauth2/authorization/github">
+                      <q-avatar><q-icon name="fa-brands fa-github"/></q-avatar>
+                    </q-btn>
 
-              <q-btn push label="注册" @click="register" color="teal" />
-              <q-btn push label="匿名访问" @click="anonymous" color="teal" />
+                  </q-card-actions>
 
-              <q-btn
-                push
-                href="https://ss.opensun.asia/oauth2/authorization/github"
-                color="teal"
-                ><q-avatar><q-icon name="fa-brands fa-github" /></q-avatar
-              ></q-btn>
 
-              <q-checkbox
-                label="记住密码"
-                checked-icon="star"
-                unchecked-icon="star_border"
-                v-model="rememberMe"
-              />
-            </div>
-          </q-form>
-        </div>
+
+                </q-form>
+
+              </q-card-section>
+
+
+
+
+            </q-card>
+        </template>
 
       </q-page>
     </q-page-container>
@@ -241,9 +228,8 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.login-page-background {
-  background-image: url("/icons/login2.png");
-
+.bg-paper {
+  background-image: url("/icons/login.png");
   background-size: cover;
   background-position: center;
   filter: brightness(100%);
